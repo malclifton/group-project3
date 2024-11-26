@@ -1,0 +1,34 @@
+/*Colors:
+#72a89d -> button text, special headings
+#c6ebd6 -> extra
+#68b0ab -> popup boxs, any displayed containers
+white -> text and everything else
+*/
+body{
+    background-image: url("./img/bodyBackground.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 679px;
+    text-align: center;
+    color: white;
+    font-family: 'TT Hoves', sans-serif;
+}
+#heading{
+font-size: 45pt;
+}
+button{
+    background-color: white;
+    color: #72a89d;
+    border: none;
+    height: 50px;
+    width: 140px;
+   font-weight: bold;
+}
+#center{
+margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
