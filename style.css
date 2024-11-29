@@ -24,11 +24,68 @@ button{
     width: 140px;
    font-weight: bold;
 }
-#center{
+center{
 margin: 0;
   position: absolute;
   top: 50%;
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+}
+
+.column{
+    float: left;
+    padding: 10px;
+}
+.left{
+    width: 60%;
+}
+.right{
+    width: 40%;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+* {
+  box-sizing: border-box;
+}
+#board{
+    width: 600px;
+    height: 600px;
+    background-color: #72a89d;
+    border: 6px solid white;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#board img{
+    width: 147px;
+    height: 147px;
+    border: 2px solid white;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+
+#winPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #68b0ab;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: none; 
+    z-index: 1000;
+    border: 3px white dashed;
+    width: 300px;
+    align-items: center;
+    justify-content: center;
 }

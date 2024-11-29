@@ -5,11 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
     <title>Game of Fifteen</title>
+    <script src="./fifteen.js"></script>
   </head>
   <body>
-    <audio controls autoplay>
-      <source src="./gameAudio.mp3" />
-      type="audio/mpeg"
-    </audio>
+    <div class="row">
+      <div class="column left">
+        <br />
+        <div id="board"></div>
+      </div>
+      <div class="column right">
+        <h1 id="heading">Game of Fifteen</h1>
+        <h3>Timer</h3>
+        <h4><span id="timer">⏱︎ 180 seconds remaining ...</span></h4>
+        <h3>Number of Moves</h3>
+        <h4><span id="turns"> 0 moves made</span></h4>
+        <br />
+        <button id="shuffle">SHUFFFLE</button>
+        <br /><br /><br />
+        <button id="solve">SOLVE</button>
+        <br /><br /><br />
+        <button id="hint">HINT</button>
+      </div>
+    </div>
+    <div id="winPopup" style="display: none">
+      <div class="popup-content">
+        <h2>✩ YOU WON ✩</h2>
+        <br />
+        <p>
+          <img src="./img/win.gif" alt="dance" />
+          <br />
+          Thank you for playing!•ᴗ•
+        </p>
+        <br />
+        <button id="playAgain">Play Again?</button>
+        <br /><br />
+        <button id="goHome">Quit?</button>
+      </div>
+    </div>
   </body>
 </html>
