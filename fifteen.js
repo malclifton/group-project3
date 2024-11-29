@@ -1,3 +1,21 @@
+
+//fifteen.html
+document.addEventListener("DOMContentLoaded", () => {
+  const howToButton = document.getElementById("how-to");
+  const instructionsPopup = document.getElementById("instructions-popup");
+  const closeInstructionsButton = document.getElementById("close-instructions");
+  
+    howToButton.addEventListener("click", () => {
+    instructionsPopup.style.display = "flex";
+  }); //show 
+  closeInstructionsButton.addEventListener("click", () => {
+    instructionsPopup.style.display = "none"; //hide
+  });
+    
+});
+
+
+//fifteenPuzzle.html
 var rows = 4;
 var columns = 4;
 
@@ -13,10 +31,26 @@ let shuffleHistory = [];
 let countdown = 180;
 
 window.onload = function () {
+    const audio = document.getElementById("gameAudio");
 
+    audio.play().catch(() => {
+        const unmuteButton = document.createElement("button");
+        unmuteButton.innerText = "♬⋆.˚";
+        unmuteButton.style.position = "absolute";
+        unmuteButton.style.top = "10px";
+        unmuteButton.style.left = "10px";
+        unmuteButton.style.width = "60px";
+        unmuteButton.style.borderRadius = "50%"
+        unmuteButton.style.zIndex = "1000";
+        document.body.appendChild(unmuteButton);
+
+        unmuteButton.addEventListener("click", () => {
+            audio.play();
+            document.body.removeChild(unmuteButton); 
+        });
+    });
     shuffleArray(imgOrder);
     displayBoard();
-
     startTimer();
 
     document.getElementById("shuffle").addEventListener("click", () => {
@@ -24,12 +58,10 @@ window.onload = function () {
         displayBoard();
         turns = 0;
         document.getElementById("turns").innerText = "0 moves made";
+        restartAudio();
     });
     document.getElementById("solve").addEventListener("click", solvePuzzle);
 
-    document.getElementById("hint").addEventListener("click", () => {
-        displayShuffleSteps();
-    });
     document.getElementById("playAgain").addEventListener("click", () => {
        closeWinPopup();
         restartGame();
@@ -38,8 +70,20 @@ window.onload = function () {
     document.getElementById("goHome").addEventListener("click", () => {
         window.location.href = "./fifteen.html";
     });
-
 };
+
+function playAudio() {
+    const audio = document.getElementById("gameAudio");
+    audio.play();
+}
+
+function restartAudio() {
+    const audio = document.getElementById("gameAudio");
+    if (audio) {
+        audio.currentTime = 0;
+        audio.play();
+    }
+}
 
 //start timer
 function startTimer() {
@@ -53,7 +97,7 @@ function startTimer() {
                 timerExpired = true;
                 clearInterval(timerInterval); 
                 timer.textContent = "Time's up!";
-                alert("Time's up! You ran out of time :(");
+                showLosePopup();
             }
         }
     }
@@ -120,6 +164,21 @@ function showWinPopup() {
 function closeWinPopup() {
     document.getElementById("winPopup").style.display = "none"; // Hide the popup
 }
+//show lose popup
+function showLosePopup() {
+    const losePopup = document.getElementById("losePopup");
+    losePopup.style.display = "flex";
+
+    document.getElementById("retry").addEventListener("click", () => {
+        losePopup.style.display = "none";
+        restartGame();
+    });
+
+    document.getElementById("goHome").addEventListener("click", () => {
+        window.location.href = "./fifteen.html";
+    });
+}
+
 
 //display gameboard
 function displayBoard() {
@@ -143,11 +202,6 @@ function displayBoard() {
             board.append(tile);
         }
     }
-}
-
-function displayShuffleSteps() {
-    imgOrder;
-    displayBoard();
 }
 
 // Solve puzzle 
@@ -219,10 +273,6 @@ function dragEnter(e) {
     e.preventDefault();
 }
 
-function dragEnter(e) {
-    e.preventDefault();
-}
-
 function dragLeave() {
     
 }
@@ -276,4 +326,5 @@ function restartGame() {
     timerExpired = false;
     clearInterval(timerInterval);
     startTimer();
+    restartAudio();
 }

@@ -15,6 +15,10 @@
       </div>
       <div class="column right">
         <h1 id="heading">Game of Fifteen</h1>
+        <audio id="gameAudio" autoplay>
+          <source src="./gameAudio.mp3" type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
         <h3>Timer</h3>
         <h4><span id="timer">⏱︎ 180 seconds remaining ...</span></h4>
         <h3>Number of Moves</h3>
@@ -24,7 +28,6 @@
         <br /><br /><br />
         <button id="solve">SOLVE</button>
         <br /><br /><br />
-        <button id="hint">HINT</button>
       </div>
     </div>
     <div id="winPopup" style="display: none">
@@ -38,6 +41,21 @@
         </p>
         <br />
         <button id="playAgain">Play Again?</button>
+        <br /><br />
+        <button id="goHome">Quit?</button>
+      </div>
+    </div>
+    <div id="losePopup" style="display: none">
+      <div class="popup-content">
+        <h2>YOU LOST ˙◠˙</h2>
+        <br />
+        <p>
+          <img src="./img/lose.jpg" alt="dance" />
+          <br />
+          You ran out of time!
+        </p>
+        <br />
+        <button id="retry">Try Again?</button>
         <br /><br />
         <button id="goHome">Quit?</button>
       </div>

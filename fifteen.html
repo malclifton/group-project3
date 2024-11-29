@@ -5,21 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
     <title>Game of Fifteen</title>
-    <script src="./fifteenPuzzle.html"></script>
+    <script src="./fifteen.js"></script>
   </head>
   <body>
     <br /><br /><br /><br /><br /><br />
-    <!-- 
-        <audio controls autoplay>
-      <source src="./gameAudio.mp3" />
-      type="audio/mpeg"
-    </audio>
-    -->
     <h1 id="heading">Game of Fifteen</h1>
     <br />
     <div class="center">
       <h3>A Fifteen Puzzle Game</h3>
       <button id="how-to">HOW TO PLAY</button>
+      <div id="instructions-popup" class="popup">
+        <div class="popup-content">
+          <h2>How to Play?</h2>
+          <p>
+            The 15 Puzzle is a classic sliding puzzle game where the goal is to
+            arrange numbered tiles in ascending order, from 1 to 15, with an
+            empty space at the bottom-right.<br /><br />
+            Your job is to drag the tiles into the empty space until the image
+            is complete/ the tles are in the correct order.
+          </p>
+          <button id="close-instructions">Ok</button>
+        </div>
+      </div>
       <br /><br />
       <button id="start-game" onclick="location.href='./fifteenPuzzle.html'">
         START GAME
