@@ -43,16 +43,15 @@ window.onload = function () {
 
 //start timer
 function startTimer() {
-     //timer
-    const timer = document.getElementById("timer"); // Ensure this element exists
+    const timer = document.getElementById("timer");
     function updateTimer() {
         if (countdown > 0) {
-            countdown--; // Start counting down
+            countdown--; 
             timer.textContent = "⏱ " + countdown + " seconds remaining...";
         } else {
             if (!timerExpired) {
                 timerExpired = true;
-                clearInterval(timerInterval); // Stop the timer
+                clearInterval(timerInterval); 
                 timer.textContent = "Time's up!";
                 alert("Time's up! You ran out of time :(");
             }
@@ -63,30 +62,30 @@ function startTimer() {
     timerInterval = setInterval(updateTimer, 1000);
 }
 
-// Function to check if the puzzle is solved
+//check if the puzzle is solved
 function isPuzzleSolved() {
     const solvedState = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"];
     return JSON.stringify(imgOrder) === JSON.stringify(solvedState);
 }
 
 
-//shuffle board images
+//shuffle board pics
 function shuffleArray() {
     const solvedState = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"];
     imgOrder = [...solvedState];
-    shuffleHistory = []; // Reset shuffle history
+    shuffleHistory = [];
 
     let blankRow = rows - 1;
     let blankCol = columns - 1;
 
     const directions = [
-        { dr: -1, dc: 0 }, // Up
-        { dr: 1, dc: 0 },  // Down
-        { dr: 0, dc: -1 }, // Left
-        { dr: 0, dc: 1 }   // Right
+        { dr: -1, dc: 0 }, // up
+        { dr: 1, dc: 0 },  // down
+        { dr: 0, dc: -1 }, // left
+        { dr: 0, dc: 1 }   // right
     ];
 
-    for (let i = 0; i < 100; i++) { // Shuffle with 100 random moves
+    for (let i = 0; i < 100; i++) {
         const validMoves = directions.filter(({ dr, dc }) => {
             const newRow = blankRow + dr;
             const newCol = blankCol + dc;
@@ -100,13 +99,11 @@ function shuffleArray() {
         const blankIndex = blankRow * columns + blankCol;
         const swapIndex = newRow * columns + newCol;
 
-        // Record the step in shuffle history
         shuffleHistory.push({
             from: [newRow, newCol],
             to: [blankRow, blankCol]
         });
 
-        // Swap tiles
         [imgOrder[blankIndex], imgOrder[swapIndex]] = [imgOrder[swapIndex], imgOrder[blankIndex]];
 
         blankRow = newRow;
@@ -114,19 +111,18 @@ function shuffleArray() {
     }
 }
 
-// Show win popup
+// show win popup
 function showWinPopup() {
     document.getElementById("winPopup").style.display = "flex"; // Show the popup
 }
 
-// Hide win popup
+// hide win popup
 function closeWinPopup() {
     document.getElementById("winPopup").style.display = "none"; // Hide the popup
 }
 
 //display gameboard
 function displayBoard() {
-
     const board = document.getElementById("board");
     board.innerHTML = "";
     let orderIndex = 0;
@@ -136,7 +132,7 @@ function displayBoard() {
             let tile = document.createElement("img");
             tile.id = r.toString() + "-" + c.toString();
             tile.src = "./img/image2/cat_" + imgOrder[orderIndex++] + ".jpeg";
-            //drag
+
             tile.addEventListener("dragstart", dragStart); //click image to drag
             tile.addEventListener("dragover", dragOver);    //moving image around 
             tile.addEventListener("dragenter", dragEnter);  //drag image to another
@@ -149,30 +145,26 @@ function displayBoard() {
     }
 }
 
-// Display shuffle steps with animations
 function displayShuffleSteps() {
     imgOrder;
     displayBoard();
 }
 
-
 // Solve puzzle 
 function solvePuzzle() {
     const board = document.getElementById("board");
-    let tempImgOrder = [...imgOrder]; // Start with the current board state
-    let movesMade = 0; // Initialize a counter for the number of moves made during solving
+    let tempImgOrder = [...imgOrder];
+    let movesMade = 0; 
 
-    // Find the position of the blank tile ("16")
     let blankRow, blankCol;
     for (let i = 0; i < imgOrder.length; i++) {
-        if (imgOrder[i] === "16") { // Blank tile is represented by "16"
+        if (imgOrder[i] === "16") { // blank tile is 16
             blankRow = Math.floor(i / columns);
             blankCol = i % columns;
             break;
         }
     }
 
-    // Replay the shuffle history in reverse to solve the puzzle
     for (let i = shuffleHistory.length - 1; i >= 0; i--) {
         setTimeout(() => {
             const step = shuffleHistory[i];
@@ -181,16 +173,13 @@ function solvePuzzle() {
             const toRow = step.to[0];
             const toCol = step.to[1];
 
-            // Check if the move is valid by ensuring that only adjacent tiles can be swapped
             const isAdjacent = Math.abs(blankRow - toRow) + Math.abs(blankCol - toCol) === 1;
             if (isAdjacent) {
                 const fromIndex = fromRow * columns + fromCol;
                 const toIndex = toRow * columns + toCol;
 
-                // Swap tiles in the tempImgOrder
                 [tempImgOrder[fromIndex], tempImgOrder[toIndex]] = [tempImgOrder[toIndex], tempImgOrder[fromIndex]];
 
-                // Redraw the board with the new arrangement
                 board.innerHTML = "";
                 tempImgOrder.forEach((tile, index) => {
                     const img = document.createElement("img");
@@ -199,31 +188,27 @@ function solvePuzzle() {
                     board.appendChild(img);
                 });
 
-                // Update the final board state
                 if (i === 0) imgOrder = [...tempImgOrder];
 
-                // Update the blank tile's position
                 blankRow = toRow;
                 blankCol = toCol;
 
-                // Increment the move counter
                 movesMade++;
                 document.getElementById("turns").innerText = movesMade + " moves made";
             }
 
             // Check if the puzzle is solved
             if (isPuzzleSolved()) {
-                clearInterval(timerInterval); // Stop the timer
-                showWinPopup(); // Show the win popup
+                clearInterval(timerInterval); 
+                showWinPopup(); 
             }
-        }, (shuffleHistory.length - 1 - i) * 300); // Delay each step
+        }, (shuffleHistory.length - 1 - i) * 300);
     }
 }
 
-
 //gameplay functions
 function dragStart() {
-    currentTile = this; //tile being dragged
+    currentTile = this; 
 }
 
 function dragOver(e) {
@@ -243,12 +228,12 @@ function dragLeave() {
 }
 
 function dragDrop() {
-    targetTile = this; //tile being dropped on
+    targetTile = this;
 }
 
 function dragEnd() {
     if (!targetTile || targetTile === currentTile) {
-        return; // Ensure targetTile exists and is not the same as the current tile
+        return; 
     }
 
     let currentCoords = currentTile.id.split("-");
@@ -280,24 +265,15 @@ function dragEnd() {
 
 // Restart the game
 function restartGame() {
-    // Reset the puzzle state to the solved state and shuffle it
     const solvedState = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"];
-    imgOrder = [...solvedState]; // Set the puzzle back to the solved state
-    shuffleArray(); // Shuffle the tiles
-
-    // Clear the board and redisplay the shuffled tiles
+    imgOrder = [...solvedState]; 
+    shuffleArray();
     displayBoard();
-
-    // Reset the moves counter and update the UI
     turns = 0;
     document.getElementById("turns").innerText = "0 moves made";
-
-    // Reset the timer
-    countdown = 180; // Reset to 180 seconds
+    countdown = 180;
     document.getElementById("timer").textContent = "⏱ 180 seconds remaining...";
     timerExpired = false;
-
-    // Clear the previous timer interval and start a new one
     clearInterval(timerInterval);
     startTimer();
 }
