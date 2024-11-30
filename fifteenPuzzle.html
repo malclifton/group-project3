@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
     <title>Game of Fifteen</title>
-    <script src="./fifteen.js"></script>
   </head>
   <body>
     <div class="row">
       <div class="column left">
         <br />
-        <div id="board"></div>
+        <div id="board" class="board"></div>
       </div>
       <div class="column right">
         <h1 id="heading">Game of Fifteen</h1>
@@ -28,8 +27,20 @@
         <br /><br /><br />
         <button id="solve">SOLVE</button>
         <br /><br /><br />
+
+        <div>
+          <label for="imageSetSelect">Select Image:</label>
+          <select id="imageSetSelect">
+            <option value="image1">Image 1</option>
+            <option value="image2">Image 2</option>
+            <option value="image3">Image 3</option>
+            <option value="image4">Image 4</option>
+          </select>
+        </div>
       </div>
     </div>
+
+    <!--Popup Windows-->
     <div id="winPopup" style="display: none">
       <div class="popup-content">
         <h2>✩ YOU WON ✩</h2>
@@ -60,5 +71,6 @@
         <button id="goHome">Quit?</button>
       </div>
     </div>
+    <script src="./fifteen.js"></script>
   </body>
 </html>

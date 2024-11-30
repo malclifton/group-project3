@@ -1,39 +1,31 @@
 
-//fifteen.html
-document.addEventListener("DOMContentLoaded", () => {
-  const howToButton = document.getElementById("how-to");
-  const instructionsPopup = document.getElementById("instructions-popup");
-  const closeInstructionsButton = document.getElementById("close-instructions");
-  
-    howToButton.addEventListener("click", () => {
-    instructionsPopup.style.display = "flex";
-  }); //show 
-  closeInstructionsButton.addEventListener("click", () => {
-    instructionsPopup.style.display = "none"; //hide
-  });
-    
-});
-
-
-//fifteenPuzzle.html
 var rows = 4;
 var columns = 4;
 
-var currentTile;
+var currentTile; //selected tile
 var targetTile; //blank tile 
 
-var turns = 0;
-var imgOrder = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"];
+var turns = 0;  //moves made counter
+var imgOrder = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"]; //array of images
 
 let timerInterval;
 let timerExpired = false;
-let shuffleHistory = [];
-let countdown = 180;
+let shuffleHistory = [];    //array to keep track of shuffle
+let countdown = 180;        //timer
+
+let currentImageSet = "image1"; //default image background folder
 
 window.onload = function () {
-    const audio = document.getElementById("gameAudio");
 
-    audio.play().catch(() => {
+const savedSet = localStorage.getItem("selectedImageSet");  //store choice so it loads up even if the page is reloaded
+    if (savedSet) {
+        currentImageSet = savedSet; // load saved set
+        document.getElementById("imageSetSelect").value = savedSet; // update dropdown
+    }
+
+    const audio = document.getElementById("gameAudio"); //get game audio
+    audio.play().catch(() => {      
+        //styling the audio button
         const unmuteButton = document.createElement("button");
         unmuteButton.innerText = "♬⋆.˚";
         unmuteButton.style.position = "absolute";
@@ -49,10 +41,15 @@ window.onload = function () {
             document.body.removeChild(unmuteButton); 
         });
     });
+    
     shuffleArray(imgOrder);
     displayBoard();
     startTimer();
 
+    const imageSetSelect = document.getElementById("imageSetSelect"); //get users choosen background
+    imageSetSelect.addEventListener("change", changeImageSet);  //set change
+
+    //when shuffle button is clicked
     document.getElementById("shuffle").addEventListener("click", () => {
         shuffleArray(imgOrder);
         displayBoard();
@@ -60,23 +57,35 @@ window.onload = function () {
         document.getElementById("turns").innerText = "0 moves made";
         restartAudio();
     });
+
+    //when solve button is clicked
     document.getElementById("solve").addEventListener("click", solvePuzzle);
 
+    //button for playagain? on popup
     document.getElementById("playAgain").addEventListener("click", () => {
        closeWinPopup();
         restartGame();
     });
 
+    //button for quit? on popup
     document.getElementById("goHome").addEventListener("click", () => {
         window.location.href = "./fifteen.html";
     });
 };
 
+function changeImageSet() {
+    const selectedSet = document.getElementById("imageSetSelect").value;
+    currentImageSet = selectedSet; 
+    localStorage.setItem("selectedImageSet", selectedSet);  //stores user choice
+    shuffleArray(imgOrder);
+    displayBoard();
+}
+
+//audio functions
 function playAudio() {
     const audio = document.getElementById("gameAudio");
     audio.play();
 }
-
 function restartAudio() {
     const audio = document.getElementById("gameAudio");
     if (audio) {
@@ -101,7 +110,6 @@ function startTimer() {
             }
         }
     }
-
     timer.textContent = "⏱ 180 seconds remaining...";
     timerInterval = setInterval(updateTimer, 1000);
 }
@@ -109,16 +117,14 @@ function startTimer() {
 //check if the puzzle is solved
 function isPuzzleSolved() {
     const solvedState = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"];
-    return JSON.stringify(imgOrder) === JSON.stringify(solvedState);
+    return JSON.stringify(imgOrder) === JSON.stringify(solvedState); //converts js string to json and returns the string
 }
-
 
 //shuffle board pics
 function shuffleArray() {
     const solvedState = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"];
     imgOrder = [...solvedState];
     shuffleHistory = [];
-
     let blankRow = rows - 1;
     let blankCol = columns - 1;
 
@@ -135,11 +141,9 @@ function shuffleArray() {
             const newCol = blankCol + dc;
             return newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns;
         });
-
         const { dr, dc } = validMoves[Math.floor(Math.random() * validMoves.length)];
         const newRow = blankRow + dr;
         const newCol = blankCol + dc;
-
         const blankIndex = blankRow * columns + blankCol;
         const swapIndex = newRow * columns + newCol;
 
@@ -155,31 +159,6 @@ function shuffleArray() {
     }
 }
 
-// show win popup
-function showWinPopup() {
-    document.getElementById("winPopup").style.display = "flex"; // Show the popup
-}
-
-// hide win popup
-function closeWinPopup() {
-    document.getElementById("winPopup").style.display = "none"; // Hide the popup
-}
-//show lose popup
-function showLosePopup() {
-    const losePopup = document.getElementById("losePopup");
-    losePopup.style.display = "flex";
-
-    document.getElementById("retry").addEventListener("click", () => {
-        losePopup.style.display = "none";
-        restartGame();
-    });
-
-    document.getElementById("goHome").addEventListener("click", () => {
-        window.location.href = "./fifteen.html";
-    });
-}
-
-
 //display gameboard
 function displayBoard() {
     const board = document.getElementById("board");
@@ -190,7 +169,7 @@ function displayBoard() {
         for (let c = 0; c < columns; c++) {
             let tile = document.createElement("img");
             tile.id = r.toString() + "-" + c.toString();
-            tile.src = "./img/image2/cat_" + imgOrder[orderIndex++] + ".jpeg";
+            tile.src = `./img/${currentImageSet}/`  + imgOrder[orderIndex++] + ".jpeg";
 
             tile.addEventListener("dragstart", dragStart); //click image to drag
             tile.addEventListener("dragover", dragOver);    //moving image around 
@@ -237,7 +216,7 @@ function solvePuzzle() {
                 board.innerHTML = "";
                 tempImgOrder.forEach((tile, index) => {
                     const img = document.createElement("img");
-                    img.src = `./img/image2/cat_${tile}.jpeg`;
+                    img.src = `./img/${currentImageSet}/${tile}.jpeg`;
                     img.id = Math.floor(index / columns) + "-" + (index % columns);
                     board.appendChild(img);
                 });
@@ -311,6 +290,31 @@ function dragEnd() {
         turns += 1;
         document.getElementById("turns").innerText = turns + " moves made";
     }
+}
+
+// show win popup
+function showWinPopup() {
+    document.getElementById("winPopup").style.display = "flex";
+}
+
+// hide win popup
+function closeWinPopup() {
+    document.getElementById("winPopup").style.display = "none";
+}
+
+//show lose popup
+function showLosePopup() {
+    const losePopup = document.getElementById("losePopup");
+    losePopup.style.display = "flex";
+
+    document.getElementById("retry").addEventListener("click", () => {
+        losePopup.style.display = "none";
+        restartGame();
+    });
+
+    document.getElementById("goHome").addEventListener("click", () => {
+        window.location.href = "./fifteen.html";
+    });
 }
 
 // Restart the game
