@@ -263,6 +263,7 @@ function dragEnd() {
         return; 
     }
 
+    // current and target tile coordinates
     let currentCoords = currentTile.id.split("-");
     let r = parseInt(currentCoords[0]);
     let c = parseInt(currentCoords[1]);
@@ -271,24 +272,32 @@ function dragEnd() {
     let r2 = parseInt(targetCoords[0]);
     let c2 = parseInt(targetCoords[1]);
 
-    let moveLeft = r === r2 && c2 === c - 1;
-    let moveRight = r === r2 && c2 === c + 1;
-    let moveUp = c === c2 && r2 === r - 1;
-    let moveDown = c === c2 && r2 === r + 1;
+    let currentIsBlank = currentTile.src.includes("16.jpeg");
+    let targetIsBlank = targetTile.src.includes("16.jpeg");
 
-    let isAdjacent = moveLeft || moveRight || moveUp || moveDown;
+    if (currentIsBlank) {
+        return; 
+    }
 
-    if (isAdjacent) {
-        let currentImg = currentTile.src;
-        let targetImg = targetTile.src;
+    if (targetIsBlank) {
+        // check if adjacent 
+        const isAdjacent = Math.abs(r - r2) + Math.abs(c - c2) === 1;
 
-        currentTile.src = targetImg;
-        targetTile.src = currentImg;
+        if (isAdjacent) {
+            // swap
+            let currentImg = currentTile.src;
+            let targetImg = targetTile.src;
 
-        turns += 1;
-        document.getElementById("turns").innerText = turns + " moves made";
+            currentTile.src = targetImg;
+            targetTile.src = currentImg;
+
+            turns++;
+            document.getElementById("turns").innerText = turns + " moves made";
+            
+        }
     }
 }
+
 
 // show win popup
 function showWinPopup() {
