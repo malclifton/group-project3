@@ -16,13 +16,11 @@ let countdown = 180;        //timer
 let currentImageSet = "image1"; //default image background folder
 
 window.onload = function () {
-
-const savedSet = localStorage.getItem("selectedImageSet");  //store choice so it loads up even if the page is reloaded
+    const savedSet = localStorage.getItem("selectedImageSet");  //store choice so it loads up even if the page is reloaded
     if (savedSet) {
         currentImageSet = savedSet; // load saved set
         document.getElementById("imageSetSelect").value = savedSet; // update dropdown
     }
-
     const audio = document.getElementById("gameAudio"); //get game audio
     audio.play().catch(() => {      
         //styling the audio button
@@ -316,6 +314,7 @@ function showLosePopup() {
         window.location.href = "./fifteen.html";
     });
 }
+
 
 // Restart the game
 function restartGame() {
