@@ -1,4 +1,3 @@
-
 var rows = 4;
 var columns = 4;
 
@@ -21,6 +20,7 @@ window.onload = function () {
         currentImageSet = savedSet; // load saved set
         document.getElementById("imageSetSelect").value = savedSet; // update dropdown
     }
+
     const audio = document.getElementById("gameAudio"); //get game audio
     audio.play().catch(() => {      
         //styling the audio button
@@ -39,6 +39,16 @@ window.onload = function () {
             document.body.removeChild(unmuteButton); 
         });
     });
+    
+    // Add CSS for movable tiles hover effect
+    const style = document.createElement('style');
+    style.textContent = `
+    .movable:hover {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
+    `;
+    document.head.appendChild(style);
     
     shuffleArray(imgOrder);
     displayBoard();
@@ -179,6 +189,36 @@ function displayBoard() {
             board.append(tile);
         }
     }
+    
+    updateMovableTiles();
+}
+
+// Add hover highlighting for movable tiles
+function updateMovableTiles() {
+    const board = document.getElementById("board");
+    const blankTile = document.querySelector(`img[src$="16.jpeg"]`);
+    const blankCoords = blankTile.id.split("-");
+    const blankRow = parseInt(blankCoords[0]);
+    const blankCol = parseInt(blankCoords[1]);
+
+    const tiles = board.querySelectorAll("img:not([src$='16.jpeg'])");
+    
+    tiles.forEach(tile => {
+        const coords = tile.id.split("-");
+        const row = parseInt(coords[0]);
+        const col = parseInt(coords[1]);
+
+        // Check if tile is in same row or column as blank tile
+        const isMovable = row === blankRow || col === blankCol;
+        
+        if (isMovable) {
+            tile.classList.add("movable");
+            tile.style.cursor = "pointer";
+        } else {
+            tile.classList.remove("movable");
+            tile.style.cursor = "default";
+        }
+    });
 }
 
 // Solve puzzle 
@@ -263,7 +303,6 @@ function dragEnd() {
         return; 
     }
 
-    // current and target tile coordinates
     let currentCoords = currentTile.id.split("-");
     let r = parseInt(currentCoords[0]);
     let c = parseInt(currentCoords[1]);
@@ -296,8 +335,14 @@ function dragEnd() {
             
         }
     }
-}
 
+        updateMovableTiles();
+
+        if (isPuzzleSolved()) {
+            clearInterval(timerInterval); 
+            showWinPopup(); 
+        }
+    }
 
 // show win popup
 function showWinPopup() {
@@ -323,7 +368,6 @@ function showLosePopup() {
         window.location.href = "./fifteen.html";
     });
 }
-
 
 // Restart the game
 function restartGame() {
