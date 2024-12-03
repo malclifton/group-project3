@@ -96,4 +96,109 @@ margin: 0;
     height: 80px
 }
 
+and the whole css with it /*Colors:
+#72a89d -> button text, special headings
+#c6ebd6 -> extra
+#68b0ab -> popup boxs, any displayed containers
+white -> text and everything else
+*/
+body{
+    background-image: url("./img/bodyBackground.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 679px;
+    text-align: center;
+    color: white;
+    font-family: 'TT Hoves', sans-serif;
+}
+#heading{
+font-size: 45pt;
+}
+button{
+    background-color: white;
+    color: #72a89d;
+    border: none;
+    height: 50px;
+    width: 140px;
+   font-weight: bold;
+}
+center{
+margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
 
+.column{
+    float: left;
+    padding: 10px;
+}
+.left{
+    width: 60%;
+}
+.right{
+    width: 40%;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+* {
+  box-sizing: border-box;
+}
+#board{
+    width: 600px;
+    height: 600px;
+    background-color: #72a89d;
+    border: 6px solid white;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#board img{
+    width: 147px;
+    height: 147px;
+    border: 2px solid white;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+
+#winPopup, #losePopup, .popup{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #68b0ab;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: none; 
+    z-index: 1000;
+    border: 3px white dashed;
+    width: 300px;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#losePopup img{
+    width: 80px;
+    height: 80px
+}
+.game-button {
+    cursor: pointer;
+    background-color:white;
+    border: none;
+    height: 50px;
+    width: 140px;
+    font-size: 12px;
+   font-weight: bold;
+}

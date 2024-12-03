@@ -79,7 +79,13 @@ window.onload = function () {
     document.getElementById("goHome").addEventListener("click", () => {
         window.location.href = "./fifteen.html";
     });
+
+    // Event listener for the Hint button
+    document.getElementById('hintButton').addEventListener('click', function () {
+        highlightHintMove(imgOrder);
+    });
 };
+
 
 function changeImageSet() {
     const selectedSet = document.getElementById("imageSetSelect").value;
@@ -383,4 +389,71 @@ function restartGame() {
     clearInterval(timerInterval);
     startTimer();
     restartAudio();
+}
+// Function to find the position of the empty space ("16")
+function findEmptySpace(board) {
+    for (let i = 0; i < board.length; i++) {
+        if (board[i] === "16") { // The empty tile is represented by "16"
+            return i;
+        }
+    }
+    return -1; // Should never reach here if the board is valid
+}
+
+// Function to get the possible moves for the empty space
+function getPossibleMoves(emptyIndex) {
+    const moves = [];
+    const row = Math.floor(emptyIndex / columns);
+    const col = emptyIndex % columns;
+
+    if (row > 0) moves.push(emptyIndex - columns); // Above
+    if (row < rows - 1) moves.push(emptyIndex + columns); // Below
+    if (col > 0) moves.push(emptyIndex - 1); // Left
+    if (col < columns - 1) moves.push(emptyIndex + 1); // Right
+
+    return moves;
+}
+
+// Function to get the tile number at a specific index
+function getTileAtIndex(board, index) {
+    return board[index];
+}
+
+// Function to get the optimal move for the hint
+function getHint(board) {
+    const emptyIndex = findEmptySpace(board);
+    const possibleMoves = getPossibleMoves(emptyIndex);
+    let optimalMove = possibleMoves[0];
+    let minManhattanDistance = Infinity;
+
+    for (let move of possibleMoves) {
+        const tile = getTileAtIndex(board, move);
+        const tileNumber = parseInt(tile, 10); // Convert tile string to integer
+        const targetIndex = tileNumber - 1;
+        const targetRow = Math.floor(targetIndex / columns);
+        const targetCol = targetIndex % columns;
+        const currentRow = Math.floor(move / columns);
+        const currentCol = move % columns;
+        const distance = Math.abs(targetRow - currentRow) + Math.abs(targetCol - currentCol);
+
+        if (distance < minManhattanDistance) {
+            minManhattanDistance = distance;
+            optimalMove = move;
+        }
+    }
+
+    return optimalMove;
+}
+
+// Function to highlight the hint move
+function highlightHintMove(board) {
+    // Clear previous highlights
+    const tiles = document.querySelectorAll('#board img');
+    tiles.forEach(tile => tile.style.border = '');
+
+    const optimalMove = getHint(board);
+    const row = Math.floor(optimalMove / columns);
+    const col = optimalMove % columns;
+    const tileElement = document.getElementById(`${row}-${col}`);
+    tileElement.style.border = '2px solid red'; // Highlight the tile with a red border
 }
